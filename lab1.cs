@@ -1,53 +1,51 @@
 using System;
 using System.Text.RegularExpressions;
 
-public class PasswordChecker
+public class PasswordValidator
 {
-    public static bool IsValidPassword(string password, string regNumber, string name)
+    public static void Main()
     {
-        // 1. 2 Characters of Registration Number
-        string regChars = regNumber.Substring(0, 2);
-        if (!password.Contains(regChars)) return false;
+        string pattern = 
+            @"^(?=.*?sp)" +
+            @"(?=.*?[A-Z])" +
+            @"(?=(?:.*?[!@#$%^&*()_+{}\[\]:;<>,\.?~`]){2,})" +
+            @"(?=(?:.*?[maryamtanveermalik]){4,}).{0,12}$";
 
-        // 2. At Least One Uppercase Alphabet
-        if (!Regex.IsMatch(password, "[A-Z]")) return false;
-
-        // 3. At Least 2 Special Characters in Order
-        if (!Regex.IsMatch(password, @"[!@#$%^&*()_+{}\[\]:;<>,.?~`]{2}")) return false;
-
-        // 4. 4 Lowercase Alphabets from Name
-        int foundCount = 0;
-        foreach (char c in name.ToLower())
+        // Print the password instructions:
+        Console.WriteLine("Password Requirements:");
+        Console.WriteLine("1. Must contain the substring \"sp\" (from registration number sp22-bcs-021).");
+        Console.WriteLine("2. Must contain at least one uppercase letter.");
+        Console.WriteLine("3. Must contain at least 2 special characters (allowed: !@#$%^&*()_+{}[]:;<>,.?~`). They can appear anywhere.");
+        Console.WriteLine("4. Must contain at least 4 lowercase letters that appear in the name \"maryam tanveer malik\".");
+        Console.WriteLine("5. Maximum length is 12 characters.");
+        Console.WriteLine();
+        
+        // List of test passwords (with expected outcome as comments):
+        string[] testPasswords = new string[]
         {
-            if (char.IsLetter(c) && password.Contains(c))
-            {
-                foundCount++;
-            }
+            "spA!ma@ry",      // Expected: Valid
+            "spB#ta$lk",      // Expected: Valid
+            "spC%na&vi",      // Expected: Valid
+            "spD@ma!ik",      // Expected: Valid
+            "spE$tan#er",     // Expected: Valid
+            "sA!ma@ry",       // Expected: Invalid (missing "sp")
+            "spa!ma@ry",      // Expected: Invalid (missing uppercase letter)
+            "spAma@ry",       // Expected: Invalid (only one special character)
+            "spA!ma@ryextra", // Expected: Invalid (length > 12)
+            "spA!m0@ry"       // Expected: Invalid (digit '0' is not in allowed lowercase letters)
+        };
+
+        Console.WriteLine("=== Test Results ===");
+        foreach (string pass in testPasswords)
+        {
+            bool isValid = Regex.IsMatch(pass, pattern);
+            Console.WriteLine($"{pass} : {(isValid ? "Valid" : "Invalid")}");
         }
-        if (foundCount < 4) return false;
-
-        // 5. Max Length 12 Characters
-        if (password.Length > 12) return false;
-
-        return true;
+        
+        // Optionally, allow the user to enter a password:
+        Console.WriteLine("\nEnter a password for validation:");
+        string userPassword = Console.ReadLine();
+        bool isUserValid = Regex.IsMatch(userPassword, pattern);
+        Console.WriteLine(isUserValid ? "Valid password." : "Invalid password.");
     }
-
-    public static void Main(string[] args)
-    {
-        Console.WriteLine("Enter password:");
-        string password = Console.ReadLine();
-        Console.WriteLine("Enter registration number:");
-        string regNumber = Console.ReadLine();
-        Console.WriteLine("Enter name:");
-        string name = Console.ReadLine();
-
-        if (IsValidPassword(password, regNumber, name))
-        {
-            Console.WriteLine("Valid password.");
-        }
-        else
-        {
-            Console.WriteLine("Invalid password.");
-        }
-    }
 }
