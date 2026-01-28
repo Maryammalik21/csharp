@@ -1,4 +1,4 @@
-# C# Programming Labs Repository
+# C# Programming Repository
 
 This repository contains a collection of C# programming assignments and projects focused on compiler design, lexical analysis, and regular expressions. The code demonstrates various concepts in programming language theory and implementation.
 
@@ -176,7 +176,6 @@ Index: 1, Name: y, Type: identifier, Value: -
 
 **Maryam Malik**
 - GitHub: [@Maryammalik21](https://github.com/Maryammalik21)
-- Registration: sp22-bcs-021
 
 ## 📄 License
 
